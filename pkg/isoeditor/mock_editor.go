@@ -46,3 +46,32 @@ func (mr *MockEditorMockRecorder) CreateMinimalISOTemplate(arg0, arg1, arg2, arg
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMinimalISOTemplate", reflect.TypeOf((*MockEditor)(nil).CreateMinimalISOTemplate), arg0, arg1, arg2, arg3, arg4)
 }
+
+// ExtractNmstatectl mocks base method.
+func (m *MockEditor) ExtractNmstatectl(arg0, arg1 string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ExtractNmstatectl", arg0, arg1)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ExtractNmstatectl indicates an expected call of ExtractNmstatectl.
+func (mr *MockEditorMockRecorder) ExtractNmstatectl(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ExtractNmstatectl", reflect.TypeOf((*MockEditor)(nil).ExtractNmstatectl), arg0, arg1)
+}
+
+// CreateNmstateRamDisk mocks base method.
+func (m *MockEditor) CreateNmstateRamDisk(arg0, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateNmstateRamDisk", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateNmstateRamDisk indicates an expected call of CreateNmstateRamDisk.
+func (mr *MockEditorMockRecorder) CreateNmstateRamDisk(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateNmstateRamDisk", reflect.TypeOf((*MockEditor)(nil).CreateNmstateRamDisk), arg0, arg1)
+}

@@ -25,6 +25,8 @@ const (
 //go:generate mockgen -package=isoeditor -destination=mock_editor.go . Editor
 type Editor interface {
 	CreateMinimalISOTemplate(fullISOPath, rootFSURL, arch, minimalISOPath, openshiftVersion string) error
+	CreateNmstateRamDisk(nmstatectlPath, ramDiskPath string) error
+	ExtractNmstatectl(extractDir, workDir string) (string, error)
 }
 
 type rhcosEditor struct {
@@ -88,7 +90,7 @@ func execute(command, workDir string) (string, error) {
 	return strings.TrimSuffix(stdoutBytes.String(), "\n"), nil
 }
 
-func extractNmstatectl(extractDir, workDir string) (string, error) {
+func (e *rhcosEditor) ExtractNmstatectl(extractDir, workDir string) (string, error) {
 	nmstateDir, err := os.MkdirTemp(workDir, "nmstate")
 	if err != nil {
 		return "", err
@@ -149,12 +151,12 @@ func (e *rhcosEditor) CreateMinimalISOTemplate(fullISOPath, rootFSURL, arch, min
 	}
 
 	if versionOK {
-		e.nmstatectlPath, err = extractNmstatectl(extractDir, e.workDir)
+		e.nmstatectlPath, err = e.ExtractNmstatectl(extractDir, e.workDir)
 		if err != nil {
 			return err
 		}
 
-		err = createNmstateRamDisk(e.nmstatectlPath, ramDiskPath)
+		err = e.CreateNmstateRamDisk(e.nmstatectlPath, ramDiskPath)
 		if err != nil {
 			return fmt.Errorf("failed to create nmstate ram disk for arch %s: %v", arch, err)
 		}
@@ -168,7 +170,7 @@ func (e *rhcosEditor) CreateMinimalISOTemplate(fullISOPath, rootFSURL, arch, min
 	return nil
 }
 
-func createNmstateRamDisk(nmstatectlPath, ramDiskPath string) error {
+func (e *rhcosEditor) CreateNmstateRamDisk(nmstatectlPath, ramDiskPath string) error {
 	// Check if nmstatectl binary file exists
 	if _, err := os.Stat(nmstatectlPath); os.IsNotExist(err) {
 		return err
